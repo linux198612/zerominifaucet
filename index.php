@@ -133,7 +133,7 @@ $statusMessage = $faucet->getStatusMessage();
         </div>
 
         <footer>
-            <p>&copy; <?php echo date('Y'); ?> <a href="./"><?= $faucet->getSetting('site_name') ?></a>. All Rights Reserved. Version: 0.03<br>Powered by <a href="https://coolscript.hu">CoolScript</a></p>
+            <p>&copy; <?php echo date('Y'); ?> <a href="./"><?= $faucet->getSetting('site_name') ?></a>. All Rights Reserved. Version: 0.02<br>Powered by <a href="https://coolscript.hu">CoolScript</a></p>
         </footer>
     </div>
 
