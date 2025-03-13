@@ -1,0 +1,334 @@
+/* Alapbeállítások */
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Alapértelmezett világos mód */
+body {
+    background: #f4f4f4;
+    color: #333;
+    text-align: center;
+    padding: 20px;
+    transition: background 0.3s, color 0.3s;
+}
+
+/* Title + Témaváltó gomb konténer */
+.title-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* A cím középen marad, a gomb jobbra kerül */
+    padding-bottom: 10px; /* Kis térköz a státuszüzenet előtt */
+    position: relative;
+}
+
+/* A cím középen marad */
+.title {
+    flex-grow: 1; /* Kitölti a rendelkezésre álló helyet */
+    text-align: center;
+}
+
+/* Témaváltó gomb */
+.theme-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 16px;
+}
+
+.theme-btn:hover {
+    background: #0056b3;
+}
+
+
+html.dark-mode body {
+    background: #121212;
+    color: #e0e0e0;
+}
+
+
+.container {
+    max-width: 800px;
+    margin: auto;
+}
+
+/* Ha a sötét mód engedélyezett */
+body.dark-mode {
+    background: #121212;
+    color: #e0e0e0;
+}
+
+.dark-mode .card {
+    background: #1e1e1e;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .claim-btn {
+    background: linear-gradient(135deg, #1e90ff, #0056b3);
+}
+
+.dark-mode .claim-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #003d80);
+}
+
+.dark-mode table {
+    background: #252525;
+    color: white;
+}
+
+.dark-mode th {
+    background: #007bff;
+}
+
+.dark-mode td {
+    border-color: #555;
+}
+
+.dark-mode .status-message, 
+.dark-mode .alert, 
+.dark-mode .timer, 
+.dark-mode .limit-reached {
+    background: #333;
+}
+
+/* Téma váltó gomb */
+.theme-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: 0.3s;
+}
+
+.theme-btn:hover {
+    background: #0056b3;
+}
+
+/* Kártya dizájn */
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+/* Űrlap */
+.faucet-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* 🌞 Világos mód input mezők */
+.faucet-form input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #ffffff;
+    color: #333;
+    transition: background 0.3s, color 0.3s, border 0.3s;
+}
+
+/* 🌙 Sötét mód input mezők */
+.dark-mode .faucet-form input {
+    background: #222;  /* Sötétszürke háttér */
+    color: #ddd;       /* Világosszürke szöveg */
+    border: 1px solid #555; /* Halványabb határoló */
+}
+
+/* Ha az input mező fókuszban van */
+.faucet-form input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* 🌙 Sötét mód esetén fókusz */
+.dark-mode .faucet-form input:focus {
+    border-color: #1e90ff;
+}
+
+/* Placeholder szöveg világos módban */
+.faucet-form input::placeholder {
+    color: #999;
+}
+
+/* 🌙 Sötét mód - halványabb placeholder */
+.dark-mode .faucet-form input::placeholder {
+    color: #bbb;
+}
+
+
+.faucet-form label {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.faucet-form input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Alapértelmezett timer stílus (világos mód) */
+.timer {
+    background-color: #e9ecef; /* Halvány szürke háttér */
+    color: #333; /* Sötét szöveg */
+    border: 1px solid #ced4da; /* Világos szürke keret */
+    padding: 12px 15px;
+    border-radius: 10px; /* Lekerekített sarkok */
+    font-size: 14px;
+    text-align: center;
+    font-weight: bold;
+    margin: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Sötét módhoz megfelelő timer */
+.dark-mode .timer {
+    background-color: #333; /* Sötét szürke háttér */
+    color: #f1f1f1; /* Világos szöveg */
+    border: 1px solid #555; /* Sötétebb szürke keret */
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+/* 1️⃣ ALERT - Üzenetekhez (Bootstrap 5 Secondary-hez hasonló) */
+.alert {
+    background-color: #e9ecef; /* Halvány szürke háttér */
+    color: #333; /* Sötétszürke szöveg */
+    border: 1px solid #ced4da; /* Világos szürke keret */
+    padding: 12px 15px;
+    border-radius: 10px; /* Lekerekített sarkok */
+    font-size: 14px;
+    text-align: center;
+    font-weight: bold;
+    margin: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Sötét módhoz */
+.dark-mode .alert {
+    background-color: #333; /* Sötétszürke háttér */
+    color: #f1f1f1; /* Világos szöveg */
+    border: 1px solid #555; /* Sötétebb szürke keret */
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+/* 2️⃣ STATUS-MESSAGE - Faucet státusz (claim limit, idő) */
+.status-message {
+    background-color: #d1ecf1; /* Világoskék háttér */
+    color: #0c5460; /* Sötétkék szöveg */
+    border: 1px solid #bee5eb; /* Világoskék keret */
+    padding: 12px 15px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+    font-weight: bold;
+    margin: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Sötét módhoz */
+.dark-mode .status-message {
+    background-color: #1e2a30; /* Mélykék háttér */
+    color: #a0d0e0; /* Halvány kékes szöveg */
+    border: 1px solid #2b3a42; /* Sötétebb kék keret */
+}
+
+/* 3️⃣ TIMER - Claim visszaszámláló (idő kijelzés) */
+.timer {
+    background-color: #fff3cd; /* Halványsárga háttér */
+    color: #856404; /* Sötétbarna szöveg */
+    border: 1px solid #ffeeba; /* Sárga keret */
+    padding: 12px 15px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+    font-weight: bold;
+    margin: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Sötét módhoz */
+.dark-mode .timer {
+    background-color: #332b00; /* Mélysötét sárga */
+    color: #ffcc00; /* Aranysárga szöveg */
+    border: 1px solid #665500; /* Sötétebb barna keret */
+}
+
+
+
+/* Gombok */
+.claim-btn {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.claim-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #003d80);
+}
+
+/* Táblázat */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background: #007bff;
+    color: white;
+}
+
+
+
+/* 🔹 Sötét mód esetén sötétebb kék helyett mélyebb sötét árnyalatok */
+.dark-mode .claim-btn {
+    background: linear-gradient(135deg, #004080, #002855);
+}
+
+.dark-mode .claim-btn:hover {
+    background: linear-gradient(135deg, #002855, #001a33);
+}
+
+/* Sötétebb táblázat fejléc sötét módban */
+.dark-mode th {
+    background: #002855;
+    color: #ddd;
+}
+
+/* Footer */
+footer {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #777;
+}
+
+footer a {
+    color:  #777;
+    text-decoration: none;
+}
