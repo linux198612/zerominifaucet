@@ -4,13 +4,21 @@ include 'config.php'; // Database connection
 include 'classes/Database.php'; 
 include 'classes/Captcha.php'; 
 include 'classes/Faucet.php'; 
+include 'classes/Csrf.php';
 
+Csrf::generateToken();
 
 // Kezeli a request-et
 $faucet = new Faucet();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $userAddress = $_POST['zero_address'] ?? '';
-    $captcha = $_POST['captcha'] ?? '';
+    if (!Csrf::validateToken($_POST['csrf_token'] ?? '')) {
+        $_SESSION['message'] = "Invalid CSRF token!";
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit;
+    }
+    // Optionally sanitize user input
+    $userAddress = filter_var($_POST['zero_address'] ?? '', FILTER_SANITIZE_STRING);
+    $captcha = filter_var($_POST['captcha'] ?? '', FILTER_SANITIZE_STRING);
     $faucet->processClaim($userAddress, $captcha);
     header("Location: " . $_SERVER['PHP_SELF']);
     exit;
@@ -102,6 +110,8 @@ $statusMessage = $faucet->getStatusMessage();
         <label for="captcha">Enter Captcha: <strong><?= $_SESSION['captcha'] ?></strong></label>
         <input type="text" id="captcha" name="captcha" required>
 
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(Csrf::getToken()) ?>">
+
         <button type="submit" class="claim-btn">Claim</button>
     </form>
 <?php endif; ?>
@@ -133,7 +143,7 @@ $statusMessage = $faucet->getStatusMessage();
         </div>
 
         <footer>
-            <p>&copy; <?php echo date('Y'); ?> <a href="./"><?= $faucet->getSetting('site_name') ?></a>. All Rights Reserved. Version: 0.02<br>Powered by <a href="https://coolscript.hu">CoolScript</a></p>
+            <p>&copy; <?php echo date('Y'); ?> <a href="./"><?= $faucet->getSetting('site_name') ?></a>. All Rights Reserved. Version: 0.03<br>Powered by <a href="https://coolscript.hu">CoolScript</a></p>
         </footer>
     </div>
 

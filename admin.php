@@ -3,8 +3,10 @@ session_start();
 include 'config.php';
 include 'classes/Database.php';
 include 'classes/Admin.php';
+include 'classes/Csrf.php';
 
 $admin = new Admin();
+Csrf::generateToken();
 
 // Ha az admin kijelentkezik
 if (isset($_GET['logout'])) {
@@ -14,11 +16,18 @@ if (isset($_GET['logout'])) {
 // Ha az admin még nincs bejelentkezve, kezeljük a belépést
 if (!$admin->isLoggedIn()) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username'], $_POST['password'])) {
-        if ($admin->login($_POST['username'], $_POST['password'])) {
-            header("Location: admin.php");
-            exit;
+        if (!Csrf::validateToken($_POST['csrf_token'] ?? '')) {
+            $loginError = "Invalid CSRF token!";
         } else {
-            $loginError = "Invalid username or password!";
+            // Sanitize inputs before use
+            $username = filter_var($_POST['username'] ?? '', FILTER_SANITIZE_STRING);
+            $password = filter_var($_POST['password'] ?? '', FILTER_SANITIZE_STRING);
+            if ($admin->login($username, $password)) {
+                header("Location: admin.php");
+                exit;
+            } else {
+                $loginError = "Invalid username or password!";
+            }
         }
     }
     ?>
@@ -38,6 +47,7 @@ if (!$admin->isLoggedIn()) {
                     <div class="alert alert-danger text-center"><?= $loginError; ?></div>
                 <?php endif; ?>
                 <form method="POST">
+                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(Csrf::getToken()) ?>">
                     <div class="mb-3">
                         <label class="form-label">Username</label>
                         <input type="text" class="form-control" name="username" required>
@@ -60,21 +70,30 @@ if (!$admin->isLoggedIn()) {
 
 // Admin beállítások módosítása
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_settings'])) {
-    $settings = [
-        'site_name' => $_POST['site_name'],
-        'zerochain_api' => $_POST['zc_api_key'],
-        'zerochain_privatekey' => $_POST['pk'],
-        'min_payout' => $_POST['min_payout'],
-        'max_payout' => $_POST['max_payout'],
-        'daily_limit' => $_POST['daily_limit'],
-        'claim_interval' => $_POST['claim_interval']
-    ];
-    $successMessage = $admin->updateSettings($settings);
+    if (!Csrf::validateToken($_POST['csrf_token'] ?? '')) {
+        $successMessage = "Invalid CSRF token!";
+    } else {
+        $settings = [
+            'site_name' => filter_var($_POST['site_name'], FILTER_SANITIZE_STRING),
+            'zerochain_api' => filter_var($_POST['zc_api_key'], FILTER_SANITIZE_STRING),
+            'zerochain_privatekey' => filter_var($_POST['pk'], FILTER_SANITIZE_STRING),
+            'min_payout' => filter_var($_POST['min_payout'], FILTER_SANITIZE_NUMBER_INT),
+            'max_payout' => filter_var($_POST['max_payout'], FILTER_SANITIZE_NUMBER_INT),
+            'daily_limit' => filter_var($_POST['daily_limit'], FILTER_SANITIZE_NUMBER_INT),
+            'claim_interval' => filter_var($_POST['claim_interval'], FILTER_SANITIZE_NUMBER_INT)
+        ];
+        $successMessage = $admin->updateSettings($settings);
+    }
 }
 
 // Admin jelszó módosítása
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_password']) && !empty($_POST['new_password'])) {
-    $successMessage = $admin->changePassword($_POST['new_password']);
+    if (!Csrf::validateToken($_POST['csrf_token'] ?? '')) {
+        $successMessage = "Invalid CSRF token!";
+    } else {
+        $new_password = filter_var($_POST['new_password'], FILTER_SANITIZE_STRING);
+        $successMessage = $admin->changePassword($new_password);
+    }
 }
 
 // Betöltjük a beállításokat
@@ -102,6 +121,7 @@ $settings = $admin->getSettings();
             <?php endif; ?>
 
             <form method="POST">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(Csrf::getToken()) ?>">
                 <h4>API Settings</h4>
                 <div class="mb-3">
                     <label class="form-label">ZeroChain API Key</label>
@@ -140,6 +160,7 @@ $settings = $admin->getSettings();
             <hr>
 
             <form method="POST">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(Csrf::getToken()) ?>">
                 <h4>Change Admin Password</h4>
                 <div class="mb-3">
                     <label class="form-label">New Password</label>

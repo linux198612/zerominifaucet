@@ -40,6 +40,7 @@ public function getLastClaimTime() {
 }
 
     public function processClaim($userAddress, $captcha) {
+        $userAddress = filter_var($userAddress, FILTER_SANITIZE_STRING);
         if (!Captcha::validate($captcha)) {
             Captcha::generate();
             $_SESSION['message'] = "Invalid captcha! Please try again.";
@@ -47,7 +48,7 @@ public function getLastClaimTime() {
         }
 
         Captcha::generate();
-        $balance = rand($this->getSetting('min_payout'), $this->getSetting('max_payout')) / 100000000;
+        $balance = random_int($this->getSetting('min_payout'), $this->getSetting('max_payout')) / 100000000;
         $apiKey = $this->getSetting('zerochain_api');
         $privateKey = $this->getSetting('zerochain_privatekey');
 

@@ -21,6 +21,7 @@ class Admin {
 
     public function login($inputUser, $inputPass) {
         if ($inputUser === $this->username && password_verify($inputPass, $this->password)) {
+            session_regenerate_id(true);
             $_SESSION['admin_logged_in'] = true;
             return true;
         }
