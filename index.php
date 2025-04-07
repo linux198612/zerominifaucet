@@ -1,11 +1,15 @@
 <?php
-session_start();
+// Ellenőrizzük, hogy a session elindult-e
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 include 'config.php'; // Database connection
 include 'classes/Database.php'; 
 include 'classes/Captcha.php'; 
 include 'classes/Faucet.php'; 
 include 'classes/Csrf.php';
 
+// Győződjünk meg arról, hogy a CSRF token generálása helyesen történik
 Csrf::generateToken();
 
 // Kezeli a request-et
@@ -110,6 +114,7 @@ $statusMessage = $faucet->getStatusMessage();
         <label for="captcha">Enter Captcha: <strong><?= $_SESSION['captcha'] ?></strong></label>
         <input type="text" id="captcha" name="captcha" required>
 
+        <!-- Ellenőrizzük, hogy a form rejtett mezője helyesen tartalmazza a tokent -->
         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(Csrf::getToken()) ?>">
 
         <button type="submit" class="claim-btn">Claim</button>
@@ -143,7 +148,7 @@ $statusMessage = $faucet->getStatusMessage();
         </div>
 
         <footer>
-            <p>&copy; <?php echo date('Y'); ?> <a href="./"><?= $faucet->getSetting('site_name') ?></a>. All Rights Reserved. Version: 0.04<br>Powered by <a href="https://coolscript.hu">CoolScript</a></p>
+            <p>&copy; <?php echo date('Y'); ?> <a href="./"><?= $faucet->getSetting('site_name') ?></a>. All Rights Reserved. Version: 0.05<br>Powered by <a href="https://coolscript.hu">CoolScript</a></p>
         </footer>
     </div>
 
