@@ -6,11 +6,7 @@ include 'classes/Admin.php';
 include 'classes/Csrf.php';
 
 $admin = new Admin();
-
-// Csak akkor generálunk új CSRF tokent, ha még nincs beállítva
-if (empty($_SESSION['csrf_token'])) {
-    Csrf::generateToken();
-}
+Csrf::generateToken();
 
 // Ha az admin kijelentkezik
 if (isset($_GET['logout'])) {
